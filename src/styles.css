@@ -1,0 +1,401 @@
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --color-ink: #0d0705;
+  --color-ember: #e0550f;
+  --color-ember-soft: #ff8a4c;
+  --color-rust: #9a3412;
+  --color-cream: #fff1e6;
+}
+
+:root {
+  --edge: 24px;
+  --car-w: clamp(200px, 36vw, 540px);
+}
+
+html {
+  background: var(--color-ink);
+  scroll-behavior: auto;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 96px 0 28px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      70% 55% at 50% 40%,
+      rgba(224, 85, 15, 0.3),
+      transparent 70%
+    ),
+    radial-gradient(
+      60% 40% at 50% 100%,
+      rgba(120, 40, 8, 0.45),
+      transparent 70%
+    ),
+    var(--color-ink);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.hero-top {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 var(--edge);
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-ember-soft);
+}
+
+.hero-label::before,
+.hero-label::after {
+  content: "";
+  width: 32px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.35em;
+  row-gap: 0.1em;
+  margin: 1rem 0 0;
+  font-size: clamp(2.4rem, min(6vw, 12vh), 6.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.letter {
+  display: inline-block;
+  color: rgba(255, 241, 230, 0.28);
+  transition:
+    color 0.25s ease,
+    text-shadow 0.25s ease;
+}
+
+.letter.lit {
+  color: var(--color-ember);
+  text-shadow: 0 0 28px rgba(255, 110, 30, 0.55);
+}
+
+/* ---------- Road ---------- */
+
+.road {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  height: calc(var(--car-w) * 0.4 + 56px);
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    #1f0f08,
+    #120805 50%,
+    #1f0f08
+  );
+  border-block: 1px solid rgba(255, 138, 76, 0.18);
+}
+
+.road-lines {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: calc(100% + 1200px);
+  height: 3px;
+  margin-top: -1.5px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 138, 76, 0.5) 0 60px,
+    transparent 60px 120px
+  );
+  will-change: transform;
+}
+
+/* The wrapper owns the entrance transform. */
+
+.car-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding-left: var(--edge);
+}
+
+/* The car owns the scroll-driven horizontal transform. */
+
+.car {
+  position: relative;
+  flex: 0 0 auto;
+  isolation: isolate;
+  width: var(--car-w);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.car svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 18px 16px rgba(0, 0, 0, 0.55));
+}
+
+/* Glow that follows the car. */
+
+.car-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 130%;
+  height: 260%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 120, 40, 0.35),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Orange trail behind the car. */
+
+.trail {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  z-index: -1;
+  width: 100vw;
+  height: 6px;
+  margin-top: -3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 110, 30, 0.95)
+  );
+  pointer-events: none;
+}
+
+/* ---------- Stats ---------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 2vw, 24px);
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: 0 var(--edge);
+  box-sizing: border-box;
+  list-style: none;
+}
+
+.stat {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: clamp(12px, 1.6vw, 22px)
+    clamp(14px, 1.8vw, 26px);
+  border: 1px solid rgba(255, 138, 76, 0.22);
+  border-radius: 14px;
+  background: linear-gradient(
+    160deg,
+    rgba(224, 85, 15, 0.16),
+    rgba(20, 9, 5, 0.7)
+  );
+}
+
+.stat-solid {
+  background: var(--color-ember);
+  border-color: var(--color-ember);
+  color: var(--color-ink);
+}
+
+.stat-value {
+  font-size: clamp(1.6rem, 3.6vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ember-soft);
+}
+
+.stat-solid .stat-value {
+  color: var(--color-ink);
+}
+
+.stat-label {
+  font-size: clamp(0.62rem, 0.9vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.stat-text {
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  line-height: 1.4;
+  color: rgba(255, 241, 230, 0.62);
+}
+
+.stat-solid .stat-text {
+  color: rgba(13, 7, 5, 0.75);
+}
+
+.stat-bar {
+  display: block;
+  height: 4px;
+  margin-top: 0.5rem;
+  border-radius: 99px;
+  background: rgba(255, 241, 230, 0.12);
+  overflow: hidden;
+}
+
+.stat-solid .stat-bar {
+  background: rgba(13, 7, 5, 0.2);
+}
+
+.stat-fill {
+  display: block;
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    var(--color-rust),
+    var(--color-ember-soft)
+  );
+}
+
+.stat-solid .stat-fill {
+  background: var(--color-ink);
+}
+
+/* ---------- Scroll cue ---------- */
+
+.scroll-cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 241, 230, 0.6);
+}
+
+.cue-track {
+  display: block;
+  width: 120px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 241, 230, 0.15);
+  overflow: hidden;
+}
+
+.cue-fill {
+  display: block;
+  height: 100%;
+  transform-origin: left center;
+  background: var(--color-ember);
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 640px) {
+  :root {
+    --edge: 16px;
+    --car-w: clamp(200px, 62vw, 360px);
+  }
+
+  .hero {
+    padding-top: 84px;
+    padding-bottom: 20px;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 7vw, 3.2rem);
+    letter-spacing: 0.09em;
+  }
+
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+  }
+
+  .stats {
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 12px 10px;
+    border-radius: 10px;
+  }
+
+  .stat-label {
+    letter-spacing: 0.08em;
+  }
+
+  .stat-text {
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-height: 640px) {
+  .hero {
+    padding-top: 72px;
+    padding-bottom: 16px;
+  }
+
+  .hero-title {
+    margin-top: 0.6rem;
+  }
+}
+
+/* Respect users who prefer reduced motion. */
+
+@media (prefers-reduced-motion: reduce) {
+  .letter {
+    transition: none;
+  }
+}
