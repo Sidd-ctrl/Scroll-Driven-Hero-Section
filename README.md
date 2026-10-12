@@ -1,24 +1,34 @@
-# ITZ FIZZ - Scroll-driven Hero
+# ITZ FIZZ — Scroll-Driven Hero
 
-A dark, orange-toned hero section built with **React + Vite**, **GSAP** and **ScrollTrigger**.
-The sports car drives across the road as you scroll, the headline lights up as the car passes each letter,
-and the stat bars fill in turn. Reversing the scroll plays everything back.
+A dark, orange-toned animated hero section built with **React, Vite, GSAP, and ScrollTrigger**.
+
+The sports car drives across the road as you scroll, the headline lights up as the car passes each letter, and the stat bars fill progressively. Scrolling backward reverses the animation for a smooth, interactive experience.
 
 ## Features
 
-- Intro timeline on load: label, letter stagger, stats, car, then scroll cue.
-- Hero is pinned with ScrollTrigger (`pin`, `scrub`, `anticipatePin`) for 2.5 viewport heights.
-- Car position, scale and rotation are all tied to scroll progress.
-- Letters light up as the car passes them (positions re-measured on resize).
-- Stat bars fill with scroll.
-- Responsive: headline, car width, travel distance and stat cards all scale.
-- `prefers-reduced-motion`: no pin, no animation, the finished state is shown.
-- Works with touch scrolling on phones and tablets.
-- The car is an inline SVG, so no external image is needed.
+- **Animated intro:** Label, staggered headline, stats, car, and scroll cue animate on page load.
+- **Scroll-driven animation:** Hero section stays pinned using GSAP ScrollTrigger for 2.5 viewport heights.
+- **Dynamic car movement:** Position, scale, and rotation are controlled by scroll progress.
+- **Interactive typography:** Headline letters light up as the car passes them, with positions recalculated on resize.
+- **Animated statistics:** Stat bars fill progressively as the user scrolls.
+- **Responsive design:** Headline, car dimensions, travel distance, and stat cards adapt to different screen sizes.
+- **Reduced-motion support:** Respects `prefers-reduced-motion` and displays the finished state without scroll animations.
+- **Touch support:** Designed to work with touch scrolling on phones and tablets.
+- **Inline SVG car:** The sports car is rendered directly in SVG without requiring an external image.
 
-## Project structure
+## Tech Stack
 
-```
+- React
+- Vite
+- JavaScript
+- Tailwind CSS
+- GSAP
+- GSAP ScrollTrigger
+- CSS and SVG
+
+## Project Structure
+
+```text
 itz-fizz/
 ├── index.html
 ├── package.json
@@ -26,73 +36,153 @@ itz-fizz/
 ├── README.md
 ├── .gitignore
 └── src/
-    ├── main.jsx                 # React entry point
-    ├── App.jsx                  # Page layout (header, hero, results, footer)
-    ├── styles.css               # Tailwind theme + hero styles
+    ├── main.jsx
+    ├── App.jsx
+    ├── styles.css
     ├── components/
     │   ├── Header.jsx
-    │   ├── Hero.jsx             # Headline, road + car, stats, scroll cue
-    │   ├── CarSvg.jsx           # Top-view sports car drawn in SVG
+    │   ├── Hero.jsx
+    │   ├── CarSvg.jsx
     │   └── Footer.jsx
     └── hooks/
-        └── useHeroAnimation.js  # All GSAP setup (intro + scroll scene)
+        └── useHeroAnimation.js
 ```
 
-## Getting started
+## Getting Started
 
-Requires Node.js 18 or newer.
+### Prerequisites
+
+- Node.js 18 or newer
+- npm
+- Git (optional, for version control)
+
+### Installation
+
+Clone the repository and navigate to the project directory:
 
 ```bash
-npm install        # install dependencies
-npm run dev        # start the dev server at http://localhost:5173
-npm run build      # production build into dist/
-npm run preview    # preview the production build locally
+git clone https://github.com/<your-username>/<your-repo>.git
+cd itz-fizz
 ```
 
-## How the animation works
-
-- **Intro** (`useHeroAnimation.js`): a single `gsap.timeline` using `from()` tweens. Content stays visible
-  if JavaScript fails, because the default CSS state is visible.
-- **Scroll scene**: one scrubbed timeline pinned to the hero. The car's `x` runs linearly from the left
-  edge to the right edge, so the letters can be lit at the exact scroll position where the car passes them.
-- **Separate elements for separate jobs**: the intro moves `.car-wrap`, the scroll moves `.car`,
-  so the two never overwrite each other's transforms.
-- **Cleanup**: everything is created inside `gsap.matchMedia()` and reverted in the effect cleanup,
-  so StrictMode and remounts don't leave duplicate ScrollTriggers behind.
-
-## Deploying
-
-The output of `npm run build` is a static site in `dist/`.
-
-### Option A: Vercel (recommended)
-
-1. Push the project to GitHub (see below).
-2. In Vercel, click **Add New > Project** and import the repository.
-3. Framework preset: **Vite**. Build command: `npm run build`. Output directory: `dist`.
-4. Click **Deploy**.
-
-### Option B: GitHub Pages
-
-1. In `vite.config.js`, add `base: '/<your-repo-name>/'` inside `defineConfig`.
-2. Run `npm run build`.
-3. Publish the `dist/` folder, for example with the `gh-pages` package (`npx gh-pages -d dist`),
-   or use a GitHub Actions workflow that uploads `dist/` as a Pages artifact.
-4. In the repository settings, set **Pages > Source** to the branch that holds the output.
-
-## Pushing to GitHub
+Install the dependencies:
 
 ```bash
-git init
-git add .
-git commit -m "Initial commit: ITZ FIZZ scroll hero"
-git branch -M main
-git remote add origin https://github.com/<your-username>/<your-repo>.git
-git push -u origin main
+npm install
 ```
 
-## Customising
+Start the development server:
 
-- Stats live in the `STATS` array in `src/components/Hero.jsx`. The values are placeholders copied from the
-  reference design; replace them with real figures.
-- Colours are in the `@theme` block in `src/styles.css` (`--color-ember`, `--color-ink`, and so on).
-- Pin length is `PIN_DISTANCE` in `src/hooks/useHeroAnimation.js`.
+```bash
+npm run dev
+```
+
+Open the local URL provided by Vite, usually:
+
+```text
+http://localhost:5173
+```
+
+### Production Build
+
+Create an optimized production build:
+
+```bash
+npm run build
+```
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+The generated production files are stored in the `dist/` directory.
+
+## How the Animation Works
+
+### Intro Timeline
+
+The `useHeroAnimation.js` hook creates a GSAP timeline that animates the hero content when the page loads. Elements use `from()` tweens, while the default CSS keeps content visible if JavaScript fails.
+
+### Scroll-Driven Scene
+
+GSAP ScrollTrigger pins the hero section and connects animation progress to scrolling. The car moves linearly from the left edge to the right edge, allowing individual headline letters to illuminate at the appropriate scroll positions.
+
+### Independent Transforms
+
+The `.car-wrap` element handles the intro animation, while `.car` handles scroll-driven movement. Keeping these transforms separate prevents the animations from overwriting each other.
+
+### Responsive Behavior and Cleanup
+
+Animations are configured using `gsap.matchMedia()` to support responsive layouts and reduced-motion preferences. The effect cleanup reverts the animations and ScrollTriggers to prevent duplicate instances during React StrictMode remounts.
+
+## Deployment on Netlify
+
+The project is deployed as a static website using **Netlify**.
+
+### Option 1: Deploy Through GitHub
+
+1. Push the project to a GitHub repository.
+2. Log in to [Netlify](https://www.netlify.com/).
+3. Select **Add new project → Import an existing project**.
+4. Connect GitHub and select your repository.
+5. Configure the build settings:
+
+   | Setting | Value |
+   |---|---|
+   | Build command | `npm run build` |
+   | Publish directory | `dist` |
+   | Base directory | Leave blank for the project root |
+
+6. Select **Deploy site**.
+
+Netlify will build the project and provide a public URL. Subsequent pushes to the connected GitHub branch can trigger automatic deployments.
+
+### Option 2: Deploy Using Netlify CLI
+
+Install the Netlify CLI:
+
+```bash
+npm install -g netlify-cli
+```
+
+Log in to your Netlify account:
+
+```bash
+netlify login
+```
+
+Build the project:
+
+```bash
+npm run build
+```
+
+Deploy the production build:
+
+```bash
+netlify deploy --prod --dir=dist
+```
+
+If the site has not been linked to a Netlify project yet, run `netlify init` first and follow the prompts.
+
+## Customization
+
+- **Statistics:** Update the `STATS` array in `src/components/Hero.jsx` with your preferred labels and values.
+- **Colors:** Modify the theme variables in the `@theme` block of `src/styles.css`, including `--color-ember` and `--color-ink`.
+- **Scroll duration:** Adjust `PIN_DISTANCE` in `src/hooks/useHeroAnimation.js` to change how long the pinned animation lasts.
+- **Car animation:** Modify the GSAP properties controlling the car's position, scale, and rotation in `src/hooks/useHeroAnimation.js`.
+- **Typography and layout:** Customize the hero headline, spacing, responsive styles, and component layout in the relevant source files.
+
+## Deployment
+
+**Platform:** Netlify  
+**Build command:** `npm run build`  
+**Publish directory:** `dist/`
+
+The project uses Vite's static production build and does not require a separate backend server.
+
+---
+
+Built with React, GSAP, and a little motion.
